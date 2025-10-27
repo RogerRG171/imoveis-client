@@ -38,8 +38,8 @@ const Navbar = () => {
             </Link>
             <Link href="/signup">
               <Button
-                variant="secondary"
-                className="text-white bg-secondary-600 hover:bg-white hover:text-primary-700 rounded-lg"
+                variant="ghost"
+                className="text-white outline-transparent bg-secondary-600 hover:bg-transparent hover:text-secondary-600 rounded-lg  hover:outline hover:outline-1  hover:-outline-offset-1 hover:outline-secondary-600"
               >
                 Sign Up
               </Button>
