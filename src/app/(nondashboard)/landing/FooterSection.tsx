@@ -10,7 +10,7 @@ import Link from "next/link"
 
 const FooterSection = () => {
   return (
-    <div className="flex flex-col items-center mx-auto py-16 gap-4">
+    <div className="flex flex-col items-center mx-auto py-12 gap-4">
       <Link href="/" className="text-xl text-primary-800 font-bold">
         BASECLUB
       </Link>
@@ -77,11 +77,17 @@ const FooterSection = () => {
           <FontAwesomeIcon icon={faInstagram} className=" h-6 w-6" />
         </a>
       </div>
-      <div className="flex justify-center text-center space-x-4 mt-8 text-sm text-gray-500">
+      <div className="flex justify-center text-center space-x-4 mt-8 text-sm text-gray-500 border-t border-gray-300 py-6 w-11/12 ">
         <span>© RENTIFUL. All rights reserved.</span>
-        <Link href="/privacy">Privacy Policy</Link>
-        <Link href="/terms">Terms of Service</Link>
-        <Link href="/cookies">Cookie Policy</Link>
+        <Link href="/privacy" className="underline">
+          Privacy Policy
+        </Link>
+        <Link href="/terms" className="underline">
+          Terms of Service
+        </Link>
+        <Link href="/cookies" className="underline">
+          Cookie Policy
+        </Link>
       </div>
     </div>
   )
