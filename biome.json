@@ -18,8 +18,12 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "style": {
+        "noNonNullAssertion": "off"
+      },
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noExplicitAny": "off"
       }
     },
     "domains": {

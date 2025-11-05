@@ -11,5 +11,12 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "json.schemas": [
+    {
+      "fileMatch": ["biome.json"],
+      "url": "https://biomejs.dev/schemas/biome.json"
+    }
+  ]
+
 }
