@@ -1,9 +1,33 @@
+import { signOut } from "aws-amplify/auth"
+import { Bell, MessageCircle, Plus, Search } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { NAVBAR_HEIGHT } from "@/lib/constants"
+import { useGetAuthUserQuery } from "@/state/api"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Button } from "./ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
 
 const Navbar = () => {
+  const { data: authUser } = useGetAuthUserQuery()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const isDashboardPage =
+    pathname.includes("/managers") || pathname.includes("/tenants")
+
+  const handleSignOut = async () => {
+    await signOut()
+    window.location.href = "/"
+  }
+
   return (
     <div
       className="fixed w-full z-50 top-0 left-0 shadow-xl"
@@ -24,31 +48,137 @@ const Navbar = () => {
               </span>
             </div>
           </Link>
-          <p className="text-primary-200 hidden md:block">
-            Discover the best place to live with one click
-          </p>
+          {isDashboardPage && (
+            <Button
+              variant="secondary"
+              className="md:ml-4 bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
+              onClick={() =>
+                router.push(
+                  authUser?.userRole?.toLowerCase() === "manager"
+                    ? "/managers/newproperty"
+                    : "/search",
+                )
+              }
+            >
+              {authUser?.userRole?.toLowerCase() === "manager" ? (
+                <>
+                  <Plus className="h-4 w-4 " />
+                  <span className="hidden md:block ml-1/2">
+                    Add New Property
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Search className="h-4 w-4" />
+                  <span className="hidden md:block ml-1/2">Search</span>
+                </>
+              )}
+            </Button>
+          )}
+          {!isDashboardPage && (
+            <p className="text-primary-200 hidden md:block">
+              Discover the best place to live with one click
+            </p>
+          )}
           <div className="flex justify-center items-center gap-2">
-            <Link href="/signin">
-              <Button
-                variant="outline"
-                className="text-white border-white bg-transparent  hover:bg-white hover:text-primary-700 rounded-lg"
-              >
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button
-                variant="ghost"
-                className="text-white outline-transparent bg-secondary-600 hover:bg-transparent hover:text-secondary-600 rounded-lg  hover:outline hover:outline-1  hover:-outline-offset-1 hover:outline-secondary-600"
-              >
-                Sign Up
-              </Button>
-            </Link>
+            {authUser ? (
+              <DropDown
+                authUser={authUser}
+                router={router}
+                handleSignOut={handleSignOut}
+              />
+            ) : (
+              <>
+                <Link href="/signin">
+                  <Button
+                    variant="outline"
+                    className="text-white border-white bg-transparent  hover:bg-white hover:text-primary-700 rounded-lg"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button
+                    variant="ghost"
+                    className="text-white outline-transparent bg-secondary-600 hover:bg-transparent hover:text-secondary-600 rounded-lg  hover:outline hover:outline-1  hover:-outline-offset-1 hover:outline-secondary-600"
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
     </div>
   )
 }
+
+const DropDown = ({
+  authUser,
+  router,
+  handleSignOut,
+}: {
+  authUser: User
+  router: ReturnType<typeof useRouter>
+  handleSignOut: () => Promise<void>
+}) => (
+  <>
+    <div className="relative md:block">
+      <MessageCircle className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
+      <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
+    </div>
+    <div className="relative md:block">
+      <Bell className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
+      <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
+    </div>
+
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none pb-1">
+        <Avatar>
+          <AvatarImage src={authUser.userInfo?.image} />
+          <AvatarFallback className="bg-primary-600">
+            {authUser.userRole?.[0].toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <p className="text-primary-200 hidden md:block">
+          {authUser.userInfo?.name}
+        </p>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-white text-primary-700">
+        <DropdownMenuItem
+          className="cursor-pointer hover:underline font-semibold hover:!outline-none"
+          onClick={() =>
+            router.push(
+              authUser.userRole?.toLowerCase() === "manager"
+                ? "managers/properties"
+                : "/tenants/favorites",
+              { scroll: false },
+            )
+          }
+        >
+          Go to Dashboard
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-primary-200" />
+        <DropdownMenuItem
+          className="cursor-pointer hover:underline hover:!outline-none"
+          onClick={() =>
+            router.push(`${authUser.userRole?.toLowerCase()}s/settings`, {
+              scroll: false,
+            })
+          }
+        >
+          Settings
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer hover:underline hover:!outline-none"
+          onClick={handleSignOut}
+        >
+          Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </>
+)
 
 export default Navbar
