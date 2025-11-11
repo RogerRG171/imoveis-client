@@ -1,28 +1,28 @@
 import {
-  Wifi,
-  Waves,
-  Dumbbell,
-  Car,
-  PawPrint,
-  Tv,
-  Thermometer,
-  Cigarette,
-  Cable,
-  Maximize,
   Bath,
+  Building,
+  Bus,
+  Cable,
+  Car,
+  Castle,
+  Cigarette,
+  Dumbbell,
+  Hammer,
+  Home,
+  type LucideIcon,
+  Maximize,
+  Mountain,
+  PawPrint,
   Phone,
   Sprout,
-  Hammer,
-  Bus,
-  Mountain,
-  VolumeX,
-  Home,
-  Warehouse,
-  Building,
-  Castle,
+  Thermometer,
   Trees,
-  LucideIcon,
-} from "lucide-react";
+  Tv,
+  VolumeX,
+  Warehouse,
+  Waves,
+  Wifi,
+} from "lucide-react"
 
 export enum AmenityEnum {
   WasherDryer = "WasherDryer",
@@ -54,7 +54,7 @@ export const AmenityIcons: Record<AmenityEnum, LucideIcon> = {
   Parking: Car,
   PetsAllowed: PawPrint,
   WiFi: Wifi,
-};
+}
 
 export enum HighlightEnum {
   HighSpeedInternetAccess = "HighSpeedInternetAccess",
@@ -90,7 +90,7 @@ export const HighlightIcons: Record<HighlightEnum, LucideIcon> = {
   CloseToTransit: Bus,
   GreatView: Mountain,
   QuietNeighborhood: VolumeX,
-};
+}
 
 export enum PropertyTypeEnum {
   Rooms = "Rooms",
@@ -108,10 +108,10 @@ export const PropertyTypeIcons: Record<PropertyTypeEnum, LucideIcon> = {
   Villa: Castle,
   Townhouse: Home,
   Cottage: Trees,
-};
+}
 
 // Add this constant at the end of the file
-export const NAVBAR_HEIGHT = 52; // in pixels
+export const NAVBAR_HEIGHT = 50 // in pixels
 
 // Test users for development
 export const testUsers = {
@@ -133,4 +133,4 @@ export const testUsers = {
     },
   },
   managerRole: "manager",
-};
+}
