@@ -1,3 +1,5 @@
+"use client"
+
 import { signOut } from "aws-amplify/auth"
 import { Bell, MessageCircle, Plus, Search } from "lucide-react"
 import Image from "next/image"
@@ -14,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
+import { SidebarTrigger } from "./ui/sidebar"
 
 const Navbar = () => {
   const { data: authUser } = useGetAuthUserQuery()
@@ -35,46 +38,54 @@ const Navbar = () => {
     >
       <div className="flex w-full justify-between items-center py-3 px-8 bg-primary-700 text-white">
         <div className="flex  w-full justify-between items-center gap-4 md:gap-6">
-          <Link
-            href="/"
-            className="cursor-pointer hover:!text-primary-300"
-            scroll={false}
-          >
-            <div className="flex justify-center items-center font-semibold">
-              <Image src="/logo.svg" width={12} height={12} alt="logo" />
-              <span className="pl-2">RENTI</span>
-              <span className="text-secondary-500 font-light hover:!text-primary-300">
-                FUL
-              </span>
-            </div>
-          </Link>
-          {isDashboardPage && (
-            <Button
-              variant="secondary"
-              className="md:ml-4 bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
-              onClick={() =>
-                router.push(
-                  authUser?.userRole?.toLowerCase() === "manager"
-                    ? "/managers/newproperty"
-                    : "/search",
-                )
-              }
+          <div className="flex flex-row items-center gap-2">
+            {isDashboardPage && (
+              <div className="md:hidden">
+                <SidebarTrigger />
+              </div>
+            )}
+            <Link
+              href="/"
+              className="cursor-pointer hover:!text-primary-300"
+              scroll={false}
             >
-              {authUser?.userRole?.toLowerCase() === "manager" ? (
-                <>
-                  <Plus className="h-4 w-4 " />
-                  <span className="hidden md:block ml-1/2">
-                    Add New Property
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Search className="h-4 w-4" />
-                  <span className="hidden md:block ml-1/2">Search</span>
-                </>
-              )}
-            </Button>
-          )}
+              <div className="flex justify-center items-center font-semibold">
+                <Image src="/logo.svg" width={12} height={12} alt="logo" />
+                <span className="pl-2">RENTI</span>
+                <span className="text-secondary-500 font-light hover:!text-primary-300">
+                  FUL
+                </span>
+              </div>
+            </Link>
+
+            {isDashboardPage && (
+              <Button
+                variant="secondary"
+                className="md:ml-4 bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
+                onClick={() =>
+                  router.push(
+                    authUser?.userRole?.toLowerCase() === "manager"
+                      ? "/managers/newproperty"
+                      : "/search",
+                  )
+                }
+              >
+                {authUser?.userRole?.toLowerCase() === "manager" ? (
+                  <>
+                    <Plus className="h-4 w-4 " />
+                    <span className="hidden md:block ml-1/2">
+                      Add New Property
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Search className="h-4 w-4" />
+                    <span className="hidden md:block ml-1/2">Search</span>
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
           {!isDashboardPage && (
             <p className="text-primary-200 hidden md:block">
               Discover the best place to live with one click
@@ -82,11 +93,7 @@ const Navbar = () => {
           )}
           <div className="flex justify-center items-center gap-2">
             {authUser ? (
-              <DropDown
-                authUser={authUser}
-                router={router}
-                handleSignOut={handleSignOut}
-              />
+              <DropDown authUser={authUser} handleSignOut={handleSignOut} />
             ) : (
               <>
                 <Link href="/signin">
@@ -116,69 +123,70 @@ const Navbar = () => {
 
 const DropDown = ({
   authUser,
-  router,
   handleSignOut,
 }: {
   authUser: User
-  router: ReturnType<typeof useRouter>
   handleSignOut: () => Promise<void>
-}) => (
-  <>
-    <div className="relative md:block">
-      <MessageCircle className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
-      <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
-    </div>
-    <div className="relative md:block">
-      <Bell className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
-      <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
-    </div>
+}) => {
+  const router = useRouter()
+  return (
+    <>
+      <div className="relative hidden md:block">
+        <MessageCircle className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
+        <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
+      </div>
+      <div className="relative hidden md:block">
+        <Bell className="h-6 w-6 cursor-pointer text-primary-200 hover:text-primary-400" />
+        <span className="absolute top-0 right-0 w-2 h-2 bg-secondary-700 rounded-full"></span>
+      </div>
 
-    <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none pb-1">
-        <Avatar>
-          <AvatarImage src={authUser.userInfo?.image} />
-          <AvatarFallback className="bg-primary-600">
-            {authUser.userRole?.[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <p className="text-primary-200 hidden md:block">
-          {authUser.userInfo?.name}
-        </p>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-white text-primary-700">
-        <DropdownMenuItem
-          className="cursor-pointer hover:underline font-semibold hover:!outline-none"
-          onClick={() =>
-            router.push(
-              authUser.userRole?.toLowerCase() === "manager"
-                ? "managers/properties"
-                : "/tenants/favorites",
-              { scroll: false },
-            )
-          }
-        >
-          Go to Dashboard
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-primary-200" />
-        <DropdownMenuItem
-          className="cursor-pointer hover:underline hover:!outline-none"
-          onClick={() =>
-            router.push(`${authUser.userRole?.toLowerCase()}s/settings`, {
-              scroll: false,
-            })
-          }
-        >
-          Settings
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer hover:underline hover:!outline-none"
-          onClick={handleSignOut}
-        >
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </>
-)
+      <DropdownMenu>
+        <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none pb-0">
+          <Avatar>
+            <AvatarImage src={authUser.userInfo?.image} />
+            <AvatarFallback className="bg-primary-600 hover:bg-gray-400">
+              {authUser.userRole?.[0].toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <p className="text-primary-200 hidden md:block">
+            {authUser.userInfo?.name}
+          </p>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-white text-primary-700">
+          <DropdownMenuItem
+            className="cursor-pointer hover:underline font-semibold hover:!outline-none"
+            onClick={() =>
+              router.push(
+                authUser.userRole?.toLowerCase() === "manager"
+                  ? "managers/properties"
+                  : "/tenants/favorites",
+                { scroll: false },
+              )
+            }
+          >
+            Go to Dashboard
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="bg-primary-200" />
+          <DropdownMenuItem
+            className="cursor-pointer hover:underline hover:!outline-none"
+            onClick={() =>
+              router.push(`${authUser.userRole?.toLowerCase()}s/settings`, {
+                scroll: false,
+              })
+            }
+          >
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer hover:underline hover:!outline-none"
+            onClick={handleSignOut}
+          >
+            Sign out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  )
+}
 
 export default Navbar
