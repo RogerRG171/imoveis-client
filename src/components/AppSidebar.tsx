@@ -52,9 +52,9 @@ const AppSidedbar = ({ userType }: AppSidebarProps) => {
   return (
     <Sidebar
       collapsible="icon"
-      className="fixed left-0 bg-white shadow-lg"
+      className={cn("fixed left-0 bg-white shadow-lg md:relative md:block")}
       style={{
-        top: `${NAVBAR_HEIGHT}px`,
+        // top: `${NAVBAR_HEIGHT}px`,
         height: `calc(100vh - ${NAVBAR_HEIGHT}px)`,
       }}
     >
