@@ -52,7 +52,7 @@ const MapComponent = () => {
   // Show loading or error state
   if (isLoading || isError || !properties) {
     return (
-      <div className="basis-5/12 grow relative rounded-xl">
+      <div className="md:basis-5/12 md:grow relative rounded-xl">
         <div
           className="map-container rounded-xl bg-gray-200 flex items-center justify-center"
           style={{
@@ -67,11 +67,12 @@ const MapComponent = () => {
   }
 
   return (
-    <div className="basis-5/12 grow relative rounded-xl">
+    <div className="md:basis-5/12 md:grow h-[640px] relative rounded-xl md:z-10">
       <MapContainer
+        className="h-[640px] md:h-screen"
         center={defaultCenter}
         zoom={zoom}
-        style={{ height: "100%", width: "100%", borderRadius: "0.75rem" }}
+        style={{ width: "100%", borderRadius: "0.75rem" }}
         scrollWheelZoom={true}
       >
         <TileLayer
