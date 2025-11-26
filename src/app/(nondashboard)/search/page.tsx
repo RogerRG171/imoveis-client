@@ -5,6 +5,7 @@ import { NAVBAR_HEIGHT } from "@/lib/constants"
 import { useAppDispatch, useAppSelector } from "@/state/redux"
 import FiltersBar from "./FiltersBar"
 import FiltersFull from "./FiltersFull"
+import Listings from "./Listings"
 import MapComponent from "./Map"
 
 const SearchPage = () => {
@@ -21,7 +22,7 @@ const SearchPage = () => {
       }}
     >
       <FiltersBar />
-      <div className="flex justify-between flex-1 overflow-hidden gap-3 mb-5">
+      <div className="flex flex-col md:flex-row justify-between flex-1 overflow-visible md:overflow-hidden gap-3 mb-5">
         <div
           className={`h-full overflow-auto transition-all duration-300 ease-in-out ${
             isFiltersFullOpen
@@ -32,7 +33,9 @@ const SearchPage = () => {
           <FiltersFull />
         </div>
         <MapComponent />
-        <div className="basis-4/12 overflow-y-auto">{/* <Listings /> */}</div>
+        <div className="md:basis-4/12 overflow-y-visible md:overflow-y-auto scrollbar-hide">
+          <Listings />
+        </div>
       </div>
     </div>
   )

@@ -23,6 +23,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     } else {
       setIsLoading(false)
     }
+    return () => setIsLoading(false)
   }, [authUser, router, pathname])
 
   if (authLoading || isLoading) return <>Loading...</>
@@ -31,7 +32,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div className="h-full w-full">
       <Navbar />
       <main
-        className={`h-full w-full flex flex-col `}
+        className={`h-full w-full flex flex-col`}
         style={{ paddingTop: `${NAVBAR_HEIGHT}px` }}
       >
         {children}
