@@ -5,6 +5,7 @@ import { NAVBAR_HEIGHT } from "@/lib/constants"
 import { useAppDispatch, useAppSelector } from "@/state/redux"
 import FiltersBar from "./FiltersBar"
 import FiltersFull from "./FiltersFull"
+import MapComponent from "./Map"
 
 const SearchPage = () => {
   const searchParams = useSearchParams()
@@ -24,13 +25,13 @@ const SearchPage = () => {
         <div
           className={`h-full overflow-auto transition-all duration-300 ease-in-out ${
             isFiltersFullOpen
-              ? "w-3/12 opacity-100 visible"
+              ? "relative w-[100%] md:w-3/12 lg:w-2/12 md:block opacity-100 visible"
               : "w-0 opacity-0 invisible"
           }`}
         >
           <FiltersFull />
         </div>
-        {/* <MapComponent /> */}
+        <MapComponent />
         <div className="basis-4/12 overflow-y-auto">{/* <Listings /> */}</div>
       </div>
     </div>
