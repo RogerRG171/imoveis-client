@@ -58,6 +58,17 @@ export const api = createApi({
         }
       },
     }),
+    // Tenants endpoints
+    getTenant: build.query<Tenant, string>({
+      query: (cognitoId) => `tenants/${cognitoId}`,
+      providesTags: (result) => [{ type: "Tenants", id: result?.id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to load tenant profile",
+        })
+      },
+    }),
+
     updateTenantSettings: build.mutation<
       Tenant,
       { cognitoId: string } & Partial<Tenant>
@@ -134,4 +145,5 @@ export const {
   useUpdateTenantSettingsMutation,
   useUpdateManagerSettingsMutation,
   useGetPropertiesQuery,
+  useGetTenantQuery,
 } = api
