@@ -1,6 +1,3 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
-
 import { debounce } from "lodash"
 import { Search } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
@@ -85,7 +82,7 @@ const FiltersFull = () => {
   if (!isFiltersFullOpen) return null
 
   return (
-    <div className="bg-white rounded-lg px-4 h-full overflow-x-hidden scrollbar-hide pb-10 scr">
+    <div className="bg-white rounded-lg px-4 h-full overflow-x-hidden scrollbar-hide pb-10">
       <div className="flex flex-col space-y-6">
         {/* Location */}
         <div>
