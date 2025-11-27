@@ -75,19 +75,33 @@ const FiltersBar = () => {
   const handleLocationSearch = async () => {
     try {
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
           searchInput,
-        )}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}&fuzzyMatch=true`,
+        )}&format=json&limit=1&addressdetails=1`,
+        {
+          headers: {
+            "User-Agent": "MercadoImobiliario/1.0",
+          },
+        },
       )
+
+      if (!response.ok) {
+        throw new Error("Geocoding request failed")
+      }
+
       const data = await response.json()
-      if (data.features && data.features.length > 0) {
-        const [lng, lat] = data.features[0].center
+      if (data && data.length > 0) {
+        const result = data[0]
+        const lat = parseFloat(result.lat)
+        const lng = parseFloat(result.lon)
         dispatch(
           setFilters({
             location: searchInput,
             coordinates: [lng, lat],
           }),
         )
+      } else {
+        console.warn("No location found at: ", searchInput)
       }
     } catch (error) {
       console.error("Error search loaction: ", error)
@@ -116,6 +130,12 @@ const FiltersBar = () => {
             placeholder="Search location"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                handleLocationSearch()
+              }
+            }}
             className="w-28 rounded-xl rounded-r-none border-primary-400 border-r-0"
           />
           <Button
