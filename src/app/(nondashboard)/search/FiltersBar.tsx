@@ -95,9 +95,9 @@ const FiltersBar = () => {
   }
 
   return (
-    <div className="flex justify-between items-center w-full py-5">
+    <div className="flex justify-between items-center py-5">
       {/* Filters */}
-      <div className="flex justify-between items-center gap-4 p-2">
+      <div className="flex justify-between items-center gap-3 lg:gap-5 overflow-x-auto scrollbar-hide">
         {/* All Filters */}
         <Button
           variant="outline"
@@ -116,7 +116,7 @@ const FiltersBar = () => {
             placeholder="Search location"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-32 rounded-xl rounded-r-none border-primary-400 border-r-0"
+            className="w-28 rounded-xl rounded-r-none border-primary-400 border-r-0"
           />
           <Button
             onClick={handleLocationSearch}
@@ -127,7 +127,7 @@ const FiltersBar = () => {
           </Button>
         </div>
         {/* Price range */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 lg:gap-5">
           {/* Min price */}
           <Select
             value={filters.priceRange[0]?.toString() || "any"}
@@ -174,7 +174,7 @@ const FiltersBar = () => {
         </div>
 
         {/* Beds and Baths */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 lg:gap-5">
           {/* Beds */}
           <Select
             value={filters.beds}
@@ -219,7 +219,7 @@ const FiltersBar = () => {
             <SelectValue placeholder="Home Type" />
           </SelectTrigger>
           <SelectContent className="bg-white">
-            <SelectItem value="any">Any Property Type</SelectItem>
+            <SelectItem value="any">Property Type</SelectItem>
             {Object.entries(PropertyTypeIcons).map(([type, Icon]) => (
               <SelectItem key={type} value={type}>
                 <div className="flex items-center">
