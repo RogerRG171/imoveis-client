@@ -67,7 +67,7 @@ const MapComponent = () => {
   }
 
   return (
-    <div className="md:basis-5/12 md:grow h-[640px] relative rounded-xl md:z-10">
+    <div className="md:basis-5/12 md:grow h-[640px] relative rounded-xl z-10">
       <MapContainer
         className="h-[640px] md:h-screen"
         center={defaultCenter}
