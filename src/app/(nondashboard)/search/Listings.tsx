@@ -73,7 +73,7 @@ const Listings = () => {
                 }
                 onFavoriteToggle={() => handleFavoriteToggle(property.id)}
                 showFavoriteButton={!!authUser}
-                propertyLink={`/ssearch/${property.id}`}
+                propertyLink={`/search/${property.id}`}
               />
             ) : (
               <CardCompact
@@ -86,7 +86,7 @@ const Listings = () => {
                 }
                 onFavoriteToggle={() => {}}
                 showFavoriteButton={!!authUser}
-                propertyLink={`/ssearch/${property.id}`}
+                propertyLink={`/search/${property.id}`}
               />
             ),
           )}
