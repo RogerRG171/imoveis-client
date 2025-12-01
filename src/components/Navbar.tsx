@@ -50,7 +50,14 @@ const Navbar = () => {
               scroll={false}
             >
               <div className="flex justify-center items-center font-semibold">
-                <Image src="/logo.svg" width={12} height={12} alt="logo" />
+                <Image
+                  src="/logo.svg"
+                  width={12}
+                  height={12}
+                  alt="logo"
+                  priority
+                  style={{ height: "12px", width: "12px" }}
+                />
                 <span className="pl-2">RENTI</span>
                 <span className="text-secondary-500 font-light hover:!text-primary-300">
                   FUL
