@@ -1,7 +1,10 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 import { NAVBAR_HEIGHT } from "@/lib/constants"
+import { cleanParams } from "@/lib/utils"
+import { setFilters } from "@/state"
 import { useAppDispatch, useAppSelector } from "@/state/redux"
 import FiltersBar from "./FiltersBar"
 import FiltersFull from "./FiltersFull"
@@ -14,6 +17,28 @@ const SearchPage = () => {
   const isFiltersFullOpen = useAppSelector(
     (state) => state.global.isFiltersFullOpen,
   )
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <no need>
+  useEffect(() => {
+    const initialFilters = Array.from(searchParams.entries()).reduce(
+      (acc: any, [key, value]) => {
+        if (key === "priceRange" || key === "squareFeet") {
+          acc[key] = value.split(",").map((v) => (v === "" ? null : Number(v)))
+        } else if (key === "coordinates") {
+          acc[key] = value.split(",").map(Number)
+        } else {
+          acc[key] = value === "any" ? null : value
+        }
+
+        return acc
+      },
+      {},
+    )
+
+    const cleanedFilters = cleanParams(initialFilters)
+    dispatch(setFilters(cleanedFilters))
+  }, [])
+
   return (
     <div
       className="w-full mx-auto px-5 flex flex-col"
