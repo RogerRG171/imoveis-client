@@ -1,9 +1,11 @@
 import Card from "@/components/Card"
 import CardCompact from "@/components/CardCompact"
 import {
+  useAddFavoritePropertyMutation,
   useGetAuthUserQuery,
   useGetPropertiesQuery,
   useGetTenantQuery,
+  useRemoveFavoritePropertyMutation,
 } from "@/state/api"
 import { useAppSelector } from "@/state/redux"
 import type { Property } from "@/types/prismaTypes"
@@ -15,8 +17,8 @@ const Listings = () => {
     { skip: !authUser?.cognitoInfo?.userId },
   )
 
-  // add favorite
-  // remove favorite
+  const [addFavorite] = useAddFavoritePropertyMutation()
+  const [removeFavorite] = useRemoveFavoritePropertyMutation()
 
   const { filters, viewMode } = useAppSelector((state) => state.global)
 
@@ -26,7 +28,25 @@ const Listings = () => {
     isError,
   } = useGetPropertiesQuery(filters)
 
-  // handle favorites here
+  const handleFavoriteToggle = async (propertyId: number) => {
+    if (!authUser) return
+
+    const isFavorite = tenant?.favorites?.some(
+      (fav: Property) => fav.id === propertyId,
+    )
+
+    if (isFavorite) {
+      await removeFavorite({
+        cognitoId: authUser.cognitoInfo.userId,
+        propertyId,
+      })
+    } else {
+      await addFavorite({
+        cognitoId: authUser.cognitoInfo.userId,
+        propertyId,
+      })
+    }
+  }
 
   if (isLoading) return <>Loading...</>
   if (isError || !properties) return <div>Failed to fetch properties</div>
@@ -51,7 +71,7 @@ const Listings = () => {
                     (fav: Property) => fav.id === property.id,
                   ) || false
                 }
-                onFavoriteToggle={() => {}}
+                onFavoriteToggle={() => handleFavoriteToggle(property.id)}
                 showFavoriteButton={!!authUser}
                 propertyLink={`/ssearch/${property.id}`}
               />
