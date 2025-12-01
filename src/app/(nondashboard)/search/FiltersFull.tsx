@@ -25,7 +25,7 @@ const FiltersFull = () => {
   const dispatch = useDispatch()
   const pathname = usePathname()
   const router = useRouter()
-  const { filters, isFiltersFullOpen } = useAppSelector((state) => state.global)
+  const { isFiltersFullOpen } = useAppSelector((state) => state.global)
   const [localFilters, setLocalFilters] = useState(initialState.filters)
 
   //functions
