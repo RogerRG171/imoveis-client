@@ -50,7 +50,7 @@ const FiltersFull = () => {
   }
 
   const handleReset = () => {
-    setFilters(initialState.filters)
+    setLocalFilters(initialState.filters)
     dispatch(setFilters(initialState.filters))
     updateURL(initialState.filters)
   }
