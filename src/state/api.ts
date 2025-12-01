@@ -85,6 +85,36 @@ export const api = createApi({
         },
       ],
     }),
+
+    addFavoriteProperty: build.mutation<
+      Tenant,
+      { cognitoId: string; propertyId: number }
+    >({
+      query: ({ cognitoId, propertyId }) => ({
+        url: `tenants/${cognitoId}/favorites/${propertyId}`,
+        method: "POST",
+      }),
+      invalidatesTags: (result) => [
+        { type: "Tenants", id: result?.id },
+        { type: "Properties", id: "LIST" },
+      ],
+    }),
+    removeFavoriteProperty: build.mutation<
+      Tenant,
+      { cognitoId: string; propertyId: number }
+    >({
+      query: ({ cognitoId, propertyId }) => ({
+        url: `tenants/${cognitoId}/favorites/${propertyId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result) => [
+        { type: "Tenants", id: result?.id },
+        { type: "Properties", id: "LIST" },
+      ],
+    }),
+
+    // Manager routes
+
     updateManagerSettings: build.mutation<
       Manager,
       { cognitoId: string } & Partial<Manager>
@@ -146,4 +176,6 @@ export const {
   useUpdateManagerSettingsMutation,
   useGetPropertiesQuery,
   useGetTenantQuery,
+  useAddFavoritePropertyMutation,
+  useRemoveFavoritePropertyMutation,
 } = api
