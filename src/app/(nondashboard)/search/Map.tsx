@@ -91,7 +91,7 @@ const MapComponent = () => {
             ]}
           >
             <Popup>
-              <div className="flex items-start justify-between gap-3 bg-gradient-to-r from-gray-300 to-black/60 text-white p-4 m-0  rounded-md">
+              <div className="flex items-start justify-between gap-3 bg-gradient-to-b from-gray-200 to-black/90 text-white p-4 m-0 rounded-md">
                 <div className="w-10 h-10 object-cover bg-white rounded-lg"></div>
                 <div>
                   <a
@@ -101,7 +101,7 @@ const MapComponent = () => {
                   >
                     {property.name}
                   </a>
-                  <p className="text-sm font-semibold text-green-700">
+                  <p className="text-sm font-semibold text-green-500">
                     ${property.pricePerMonth}
                     <span className="text-sm text-primary-700 font-normal">
                       {" "}

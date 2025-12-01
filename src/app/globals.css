@@ -97,11 +97,15 @@ body,
 }
 
 .leaflet-popup-content-wrapper {
-  @apply !bg-primary-200;
+  @apply !bg-black/60;
   @apply !rounded-lg;
   @apply !py-1;
-  @apply !px-1;
+  @apply !px-0;
   @apply !border-primary-700;
+}
+
+.leaflet-popup-close-button span{
+  @apply text-black;
 }
 
 /* scrollbar styling */
