@@ -84,7 +84,7 @@ const Listings = () => {
                     (fav: Property) => fav.id === property.id,
                   ) || false
                 }
-                onFavoriteToggle={() => {}}
+                onFavoriteToggle={() => handleFavoriteToggle(property.id)}
                 showFavoriteButton={!!authUser}
                 propertyLink={`/search/${property.id}`}
               />
