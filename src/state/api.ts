@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth"
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils"
-import type { Manager, Property, Tenant } from "@/types/prismaTypes"
+import type {
+  Application,
+  Manager,
+  Property,
+  Tenant,
+} from "@/types/prismaTypes"
 import type { FiltersState } from "."
 
 export const api = createApi({
@@ -17,7 +22,13 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Managers", "Tenants", "Properties", "PropertyDetails"],
+  tagTypes: [
+    "Managers",
+    "Tenants",
+    "Properties",
+    "PropertyDetails",
+    "Applications",
+  ],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
       queryFn: async (_, _queryApi, _extraOptions, fetchWithBQ) => {
@@ -115,6 +126,16 @@ export const api = createApi({
 
     // Manager routes
 
+    getManager: build.query<ManagerResponse, string>({
+      query: (cognitoId) => `managers/${cognitoId}`,
+      providesTags: (result) => [{ type: "Managers", id: result?.id }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to load manager profile",
+        })
+      },
+    }),
+
     updateManagerSettings: build.mutation<
       Manager,
       { cognitoId: string } & Partial<Manager>
@@ -131,6 +152,7 @@ export const api = createApi({
         },
       ],
     }),
+
     // properties related endpoints
     getProperties: build.query<
       Property[],
@@ -168,12 +190,47 @@ export const api = createApi({
       },
     }),
 
-    getProperty: build.query<Property, number>({
+    getProperty: build.query<PropertyResponse, number>({
       query: (id) => `properties/${id}`,
       providesTags: (result, error, id) => [{ type: "PropertyDetails", id }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
           error: "Failed to load property details.",
+        })
+      },
+    }),
+
+    createProperty: build.mutation<Property, FormData>({
+      query: (newProperty) => ({
+        url: `properties`,
+        method: "POST",
+        body: newProperty,
+      }),
+      invalidatesTags: (result) => [
+        { type: "Properties", id: "List" },
+        { type: "Managers", id: result?.manager?.id },
+      ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Property created sucessfully!",
+          error: "Failed to create property",
+        })
+      },
+    }),
+
+    // application endpoints
+
+    createApplication: build.mutation<Application, Partial<Application>>({
+      query: (body) => ({
+        url: `applications`,
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["Applications"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Application created successfully!",
+          error: "Failed to create applications.",
         })
       },
     }),
@@ -189,4 +246,7 @@ export const {
   useAddFavoritePropertyMutation,
   useRemoveFavoritePropertyMutation,
   useGetPropertyQuery,
+  useGetManagerQuery,
+  useCreateApplicationMutation,
+  useCreatePropertyMutation,
 } = api
