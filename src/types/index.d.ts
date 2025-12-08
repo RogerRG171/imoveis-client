@@ -1,7 +1,13 @@
 import type { AuthUser } from "aws-amplify/auth"
 import type { MotionProps as OriginalMotionProps } from "framer-motion"
 import type { LucideIcon } from "lucide-react"
-import type { Application, Manager, Property, Tenant } from "./prismaTypes"
+import type {
+  Application,
+  Location,
+  Manager,
+  Property,
+  Tenant,
+} from "./prismaTypes"
 
 declare module "framer-motion" {
   interface MotionProps extends OriginalMotionProps {
@@ -61,6 +67,47 @@ declare global {
 
   interface PropertyOverviewProps {
     propertyId: number
+    setIsModalOpen: Dispatch<SetStateAction<boolean>>
+  }
+
+  interface PropertyResponse {
+    id: number
+    name: string
+    description: string
+    pricePerMonth: number
+    securityDeposit: number
+    applicationFee: number
+    photoUrls: string[]
+    amenities: AmenityEnum[]
+    highlights: HighlightEnum[]
+    isPetsAllowed: boolean
+    isParkingIncluded: boolean
+    beds: number
+    baths: number
+    squareFeet: number
+    propertyType: string
+    postedDate: Date
+    averageRating: number | null
+    numberOfReviews: number | null
+    locationId: number
+    managerCognitoId: string
+    location?: LocationType
+    manager?: ManagerResponse
+  }
+
+  interface LocationType {
+    id: number
+    address: string
+    city: string
+    state: string
+    country: string
+    postalCode: string
+    coordinates: {
+      latitude: number
+      longitude: number
+    }
+    properties?: Property[] // Optional relation
+    _count?: { properties: number } // Optional count
   }
 
   interface ApplicationModalProps {
@@ -71,6 +118,7 @@ declare global {
 
   interface ContactWidgetProps {
     onOpenModal: () => void
+    propertyId: number
   }
 
   interface ImagePreviewsProps {
@@ -135,6 +183,12 @@ declare global {
     userInfo: Tenant | Manager
     userRole: JsonObject | JsonPrimitive | JsonArray
   }
-}
 
-export {}
+  interface ManagerResponse {
+    id: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+  }
+}

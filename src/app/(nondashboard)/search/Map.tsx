@@ -18,7 +18,7 @@ L.Icon.Default.mergeOptions({
 })
 
 // Component to handle map center updates when filters change
-function MapController({
+export function MapController({
   center,
   zoom,
 }: {
