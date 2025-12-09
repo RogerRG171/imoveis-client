@@ -124,6 +124,22 @@ export const api = createApi({
       ],
     }),
 
+    getCurrentResidences: build.query<Property[], string>({
+      query: (cognitoId) => `tenants/${cognitoId}/current-residences`,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Properties" as const, id })),
+              { type: "Properties", id: "List" },
+            ]
+          : [{ type: "Properties", id: "List" }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch current residences.",
+        })
+      },
+    }),
+
     // Manager routes
 
     getManager: build.query<ManagerResponse, string>({
@@ -249,4 +265,5 @@ export const {
   useGetManagerQuery,
   useCreateApplicationMutation,
   useCreatePropertyMutation,
+  useGetCurrentResidencesQuery,
 } = api
