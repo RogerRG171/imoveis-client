@@ -40,10 +40,16 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <SidebarProvider>
       <div className="min-h-screen w-full bg-primary-100">
         <Navbar />
-        <div style={{ marginTop: `${NAVBAR_HEIGHT}px` }}>
-          <main className="flex">
+        <div
+          style={{
+            marginTop: `${NAVBAR_HEIGHT}px`,
+            height: `calc(100vh - ${NAVBAR_HEIGHT}px)`,
+          }}
+          className="overflow-y-auto"
+        >
+          <main className="flex h-full">
             <Sidedbar userType={authUser?.userRole.toLowerCase()} />
-            <div className="flex-grow transition-all duration-300">
+            <div className="flex-grow transition-all duration-300 overflow-y-auto scrollbar-hide">
               {children}
             </div>
           </main>
