@@ -21,7 +21,7 @@ const Applications = () => {
   if (isError || !applications) return <div>Error fetching applications</div>
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container lg:px-[10%]">
       <Header
         title="Applications"
         subtitle="Track and manage your property rental applications"
