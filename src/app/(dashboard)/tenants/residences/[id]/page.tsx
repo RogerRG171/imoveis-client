@@ -157,7 +157,7 @@ const PaymentMethod = () => {
             <div className="flex flex-col justify-between">
               <div>
                 <div className="flex items-start gap-5">
-                  <h3 className="text-lg font-semibold">Visa anding in 2026</h3>
+                  <h3 className="text-lg font-semibold">Visa ending in 2026</h3>
                   <span className="text-sm font-medium border border-primary-700 text-primary-700 px-3 py-1 rounded-full">
                     Default
                   </span>
