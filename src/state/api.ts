@@ -3,7 +3,9 @@ import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth"
 import { cleanParams, createNewUserInDatabase, withToast } from "@/lib/utils"
 import type {
   Application,
+  Lease,
   Manager,
+  Payment,
   Property,
   Tenant,
 } from "@/types/prismaTypes"
@@ -28,6 +30,8 @@ export const api = createApi({
     "Properties",
     "PropertyDetails",
     "Applications",
+    "Leases",
+    "Payments",
   ],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
@@ -273,6 +277,37 @@ export const api = createApi({
         })
       },
     }),
+
+    // lease endpoints
+    getLeases: build.query<Lease[], number>({
+      query: () => "leases",
+      providesTags: ["Leases"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch leases.",
+        })
+      },
+    }),
+
+    getPropertyLeases: build.query<Lease[], number>({
+      query: (propertyId) => `properties/${propertyId}/leases`,
+      providesTags: ["Leases"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch property leases.",
+        })
+      },
+    }),
+
+    getPayments: build.query<Payment[], number>({
+      query: (leaseId) => `leases/${leaseId}/payments`,
+      providesTags: ["Payments"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to fetch payment info.",
+        })
+      },
+    }),
   }),
 })
 
@@ -290,4 +325,7 @@ export const {
   useCreatePropertyMutation,
   useGetCurrentResidencesQuery,
   useGetApplicationsQuery,
+  useGetLeasesQuery,
+  useGetPropertyLeasesQuery,
+  useGetPaymentsQuery,
 } = api
