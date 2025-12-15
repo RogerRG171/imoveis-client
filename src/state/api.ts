@@ -173,6 +173,14 @@ export const api = createApi({
       ],
     }),
 
+    getManagerProperties: build.query<Property[], string>({
+      query: (managerCognitoId) => `managers/${managerCognitoId}/properties`,
+      providesTags: (result) => result ? [
+        ...result.map(({id})=> ({type: "Properties" as const, id})),
+        {type: "Properties", id: "LIST"}
+      ]:[{type: "Properties", id: "LIST"}]
+    }),
+
     // properties related endpoints
     getProperties: build.query<
       Property[],
@@ -328,4 +336,6 @@ export const {
   useGetLeasesQuery,
   useGetPropertyLeasesQuery,
   useGetPaymentsQuery,
+  useGetManagerPropertiesQuery
+  
 } = api
