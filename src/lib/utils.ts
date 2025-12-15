@@ -79,3 +79,33 @@ export const createNewUserInDatabase = async (
 
   return createUserResponse
 }
+
+export function formatPhoneToInternational(phoneNumber: string): string {
+  if (!phoneNumber) return ""
+
+  // Extract only digits
+  const digitsOnly = phoneNumber.replace(/\D/g, "")
+
+  if (!digitsOnly || digitsOnly.length < 10) {
+    return phoneNumber
+  }
+
+  // Add + prefix if not already there (from original string)
+  const needsPlus = !phoneNumber.trim().startsWith("+")
+  const prefix = needsPlus ? "+" : ""
+
+  // Format based on length
+  if (digitsOnly.length >= 13) {
+    // +XXX (XX) XXXXX-XXXX
+    return `${prefix}${digitsOnly.slice(0, 3)} (${digitsOnly.slice(3, 5)}) ${digitsOnly.slice(5, 10)}-${digitsOnly.slice(10)}`
+  } else if (digitsOnly.length === 12) {
+    // +XX (XX) XXXXX-XXXX
+    return `${prefix}${digitsOnly.slice(0, 2)} (${digitsOnly.slice(2, 4)}) ${digitsOnly.slice(4, 9)}-${digitsOnly.slice(9)}`
+  } else if (digitsOnly.length === 11) {
+    // +X (XXX) XXX-XXXX or +XX (XXX) XXXX-XXXX
+    return `${prefix}${digitsOnly.slice(0, 2)} (${digitsOnly.slice(2, 7)}) ${digitsOnly.slice(7)}`
+  } else {
+    // +X (XX) XXXX-XXXX
+    return `${prefix}${digitsOnly.slice(0, 1)} (${digitsOnly.slice(1, 3)}) ${digitsOnly.slice(3, 7)}-${digitsOnly.slice(6)}`
+  }
+}
