@@ -1,6 +1,7 @@
 import { Mail, MapPin, PhoneCall } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
+import { formatPhoneToInternational } from "@/lib/utils"
 
 const ApplicationCard = ({
   application,
@@ -76,10 +77,14 @@ const ApplicationCard = ({
             <span className="text-gray-500">End Date:</span>{" "}
             {new Date(application.lease?.endDate).toLocaleDateString()}
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-500">Next Payment:</span>{" "}
-            {new Date(application.lease?.nextPaymentDate).toLocaleDateString()}
-          </div>
+          {application.status === "Approved" && (
+            <div className="flex justify-between">
+              <span className="text-gray-500">Next Payment:</span>{" "}
+              {new Date(
+                application.lease?.nextPaymentDate,
+              ).toLocaleDateString()}
+            </div>
+          )}
         </div>
 
         {/* Divider desktop */}
@@ -107,7 +112,7 @@ const ApplicationCard = ({
               <div className="font-semibold">{contactPerson.name}</div>
               <div className="text-sm flex items-center text-primary-600">
                 <PhoneCall className="w-5 h-5 mr-2" />
-                {contactPerson.phoneNumber}
+                {formatPhoneToInternational(contactPerson.phoneNumber)}
               </div>
               <div className="text-sm flex items-center text-primary-600">
                 <Mail className="w-5 h-5 mr-2" />
