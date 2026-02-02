@@ -131,10 +131,10 @@ const Application = () => {
                     </div>
 
                     {/* Right Buttons */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 w-full md:w-[50%]">
                       <Link
                         href={`/managers/properties/${application.property.id}`}
-                        className={`bg-white border border-gray-300 text-gray-700 py-2 px-4
+                        className={`w-[50%] bg-white border border-gray-300 text-gray-700 py-2 px-4
                     rounded-md flex items-center justify-center hover:bg-primary-700 hover:text-primary-50`}
                         scroll={false}
                       >
@@ -144,7 +144,7 @@ const Application = () => {
                       {application.status === "Approved" && (
                         <button
                           type="button"
-                          className={`bg-white border border-gray-300 text-gray-700 py-2 px-4
+                          className={`w-[50%] bg-white border border-gray-300 text-gray-700 py-2 px-4
                             rounded-md flex items-center justify-center hover:bg-primary-700 hover:text-primary-50`}
                         >
                           <Download className="h-5 w-5 mr-2" />
@@ -154,7 +154,7 @@ const Application = () => {
                       {application.status === "Pending" && (
                         <>
                           <button
-                            className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-500"
+                            className="w-[50%] px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-500"
                             type="button"
                             onClick={() =>
                               handleStatusChange(application.id, "Approved")
@@ -163,7 +163,7 @@ const Application = () => {
                             Approve
                           </button>
                           <button
-                            className="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-500"
+                            className="w-[50%] px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-500"
                             type="button"
                             onClick={() =>
                               handleStatusChange(application.id, "Denied")
@@ -175,7 +175,7 @@ const Application = () => {
                       )}
                       {application.status === "Denied" && (
                         <button
-                          className={`bg-gray-800 text-white py-2 px-4 rounded-md flex items-center
+                          className={`w-[50%] bg-gray-800 text-white py-2 px-4 rounded-md flex items-center
                             justify-center hover:bg-secondary-500 hover:text-primary-50`}
                           type="button"
                         >
