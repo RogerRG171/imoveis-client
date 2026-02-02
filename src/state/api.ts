@@ -289,6 +289,24 @@ export const api = createApi({
       },
     }),
 
+    updateApplicationStatus: build.mutation<
+      Application & { lease?: Lease },
+      { id: number; status: string }
+    >({
+      query: ({ id, status }) => ({
+        url: `applications/${id}/status`,
+        method: "PUT",
+        body: { status },
+      }),
+      invalidatesTags: ["Applications", "Leases"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Application status updated sucessfully!",
+          error: "Failed to update application settings.",
+        })
+      },
+    }),
+
     // lease endpoints
     getLeases: build.query<Lease[], number>({
       query: () => "leases",
@@ -340,4 +358,5 @@ export const {
   useGetPropertyLeasesQuery,
   useGetPaymentsQuery,
   useGetManagerPropertiesQuery,
+  useUpdateApplicationStatusMutation,
 } = api
