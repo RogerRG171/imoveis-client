@@ -97,15 +97,15 @@ export function formatPhoneToInternational(phoneNumber: string): string {
   // Format based on length
   if (digitsOnly.length >= 13) {
     // +XXX (XX) XXXXX-XXXX
-    return `${prefix}${digitsOnly.slice(0, 3)} (${digitsOnly.slice(3, 5)}) ${digitsOnly.slice(5, 10)}-${digitsOnly.slice(10)}`
+    return `+${prefix}${digitsOnly.slice(0, 3)} (${digitsOnly.slice(3, 5)}) ${digitsOnly.slice(5, 10)}-${digitsOnly.slice(10)}`
   } else if (digitsOnly.length === 12) {
     // +XX (XX) XXXXX-XXXX
-    return `${prefix}${digitsOnly.slice(0, 2)} (${digitsOnly.slice(2, 4)}) ${digitsOnly.slice(4, 9)}-${digitsOnly.slice(9)}`
+    return `+${prefix}${digitsOnly.slice(0, 2)} (${digitsOnly.slice(2, 4)}) ${digitsOnly.slice(4, 9)}-${digitsOnly.slice(9)}`
   } else if (digitsOnly.length === 11) {
     // +X (XXX) XXX-XXXX or +XX (XXX) XXXX-XXXX
-    return `${prefix}${digitsOnly.slice(0, 2)} (${digitsOnly.slice(2, 7)}) ${digitsOnly.slice(7)}`
+    return `+${prefix}${digitsOnly.slice(0, 1)} (${digitsOnly.slice(1, 3)}) ${digitsOnly.slice(3, 7)}-${digitsOnly.slice(7)}`
   } else {
     // +X (XX) XXXX-XXXX
-    return `${prefix}${digitsOnly.slice(0, 1)} (${digitsOnly.slice(1, 3)}) ${digitsOnly.slice(3, 7)}-${digitsOnly.slice(6)}`
+    return `+${prefix}${digitsOnly.slice(0, 1)} (${digitsOnly.slice(1, 3)}) ${digitsOnly.slice(3, 7)}-${digitsOnly.slice(6)}`
   }
 }
