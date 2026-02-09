@@ -2,10 +2,65 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { setFilters } from "@/state"
 
 const HeroSection = () => {
+  const dispatch = useDispatch()
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const router = useRouter()
+
+  const handleLocationSearch = async () => {
+    try {
+      const trimmedQuery = searchQuery.trim()
+
+      if (!trimmedQuery) return
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          trimmedQuery,
+        )}&format=json&limit=1&addressdetails=1`,
+        {
+          headers: {
+            "User-Agent": "MercadoImobiliario/1.0",
+          },
+        },
+      )
+
+      if (!response.ok) {
+        throw new Error("Geocoding request failed")
+      }
+
+      const data = await response.json()
+      if (data && data.length > 0) {
+        const result = data[0]
+        const lat = parseFloat(result.lat)
+        const lng = parseFloat(result.lon)
+        dispatch(
+          setFilters({
+            location: trimmedQuery,
+            coordinates: [lng, lat],
+          }),
+        )
+        const params = new URLSearchParams({
+          location: trimmedQuery,
+          lat: lat.toString(),
+          lng: lng.toString(),
+        })
+        router.push(`/search?${params.toString()}`)
+      } else {
+        console.warn("No location found at: ", trimmedQuery)
+      }
+    } catch (error) {
+      console.error("Error search loaction: ", error)
+    }
+  }
+
   return (
     <div className="relative h-screen">
       <Image
@@ -33,13 +88,13 @@ const HeroSection = () => {
           <div className="flex  justify-center">
             <Input
               type="text"
-              value="Search query"
-              onChange={() => {}}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by city, neighborhood or address"
               className="w-full max-w-lg rounded-none rounded-l-xl border-none bg-white h-12 "
             />
             <Button
-              onClick={() => {}}
+              onClick={handleLocationSearch}
               className="bg-secondary-500 text-white rounded-none border-none rounded-r-xl h-12 hover:bg-secondary-600 "
             >
               Search
