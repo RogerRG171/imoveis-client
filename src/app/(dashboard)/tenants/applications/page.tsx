@@ -35,18 +35,18 @@ const Applications = () => {
           >
             <div className="flex justify-between gap-5 w-full pb-4 px-4">
               {application.status === "Approved" ? (
-                <div className="bg-green-100 p-4 text-green-700 grow lg:max-w-[30%] rounded-md flex items-center">
+                <div className="bg-green-100 p-4 text-green-700 grow lg:max-w-[50%] rounded-md flex items-center">
                   <CircleCheckBig className="w-5 h-5 mr-2" />
                   The property is being rented by you until{" "}
                   {new Date(application.lease?.endDate).toLocaleDateString()}
                 </div>
               ) : application.status === "Pending" ? (
-                <div className="bg-yellow-100 p-4 text-yellow-700 grow lg:max-w-[30%] rounded-md flex items-center">
+                <div className="bg-yellow-100 p-4 text-yellow-700 grow lg:max-w-[50%] rounded-md flex items-center">
                   <Clock className="w-5 h-5 mr-2" />
                   Your application is pendding approval
                 </div>
               ) : (
-                <div className="bg-red-100 p-4 text-red-700 grow lg:max-w-[30%] rounded-md flex items-center">
+                <div className="bg-red-100 p-4 text-red-700 grow lg:max-w-[50%] rounded-md flex items-center">
                   <XCircle className="w-5 h-5 mr-2" />
                   Your application has been denied
                 </div>
