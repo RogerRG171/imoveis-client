@@ -99,6 +99,12 @@ export const api = createApi({
           id: result?.id,
         },
       ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Settings updated successfuly.",
+          error: "Failed to update settings.",
+        })
+      },
     }),
 
     addFavoriteProperty: build.mutation<
@@ -113,6 +119,12 @@ export const api = createApi({
         { type: "Tenants", id: result?.id },
         { type: "Properties", id: "LIST" },
       ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Added to favorites!",
+          error: "Failed to add favorites",
+        })
+      },
     }),
     removeFavoriteProperty: build.mutation<
       Tenant,
@@ -126,6 +138,12 @@ export const api = createApi({
         { type: "Tenants", id: result?.id },
         { type: "Properties", id: "LIST" },
       ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Removed from favorite",
+          error: "Failed to remove favorite",
+        })
+      },
     }),
 
     getCurrentResidences: build.query<Property[], string>({
@@ -171,6 +189,12 @@ export const api = createApi({
           id: result?.id,
         },
       ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          success: "Settings updated successfully.",
+          error: "Failed to update settings.",
+        })
+      },
     }),
 
     getManagerProperties: build.query<Property[], string>({
@@ -182,6 +206,11 @@ export const api = createApi({
               { type: "Properties", id: "LIST" },
             ]
           : [{ type: "Properties", id: "LIST" }],
+      async onQueryStarted(_, { queryFulfilled }) {
+        await withToast(queryFulfilled, {
+          error: "Failed to load manager profile.",
+        })
+      },
     }),
 
     // properties related endpoints

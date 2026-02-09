@@ -213,8 +213,3 @@ body,
 [data-amplify-authenticator] .amplify-text--error {
   color: #ff0000;
 }
-
-/* Sonner Toast Styles */
-[data-close-button="true"] {
-  @apply bg-background border-border text-foreground hover:bg-muted;
-}
