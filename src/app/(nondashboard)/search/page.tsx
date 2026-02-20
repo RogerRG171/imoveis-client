@@ -26,14 +26,23 @@ const SearchPage = () => {
           acc[key] = value.split(",").map((v) => (v === "" ? null : Number(v)))
         } else if (key === "coordinates") {
           acc[key] = value.split(",").map(Number)
+        } else if (key === "lat" || key === "lng") {
+          // Skip - we'll handle these below
+          return acc
         } else {
           acc[key] = value === "any" ? null : value
         }
-
         return acc
       },
       {},
     )
+
+    // Convert lat/lng to coordinates if present (backwards compatibility)
+    const lat = searchParams.get("lat")
+    const lng = searchParams.get("lng")
+    if (lat && lng && !initialFilters.coordinates) {
+      initialFilters.coordinates = [parseFloat(lng), parseFloat(lat)]
+    }
 
     const cleanedFilters = cleanParams(initialFilters)
     dispatch(setFilters(cleanedFilters))

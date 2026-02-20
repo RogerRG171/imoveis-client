@@ -38,6 +38,7 @@ const FiltersBar = () => {
     const updateSearchParams = new URLSearchParams()
 
     Object.entries(cleanFilters).forEach(([key, value]) => {
+      if (key === "lat" || key === "lng") return // Never output lat/lng
       updateSearchParams.set(
         key,
         Array.isArray(value) ? value.join(",") : value.toString(),

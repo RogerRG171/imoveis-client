@@ -49,8 +49,7 @@ const HeroSection = () => {
         )
         const params = new URLSearchParams({
           location: trimmedQuery,
-          lat: lat.toString(),
-          lng: lng.toString(),
+          coordinates: `${lng},${lat}`, // lng,lat format
         })
         router.push(`/search?${params.toString()}`)
       } else {
