@@ -1,7 +1,7 @@
 import { debounce } from "lodash"
 import { Filter, Grid, List, Search } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -94,12 +94,14 @@ const FiltersBar = () => {
         const result = data[0]
         const lat = parseFloat(result.lat)
         const lng = parseFloat(result.lon)
-        dispatch(
-          setFilters({
-            location: searchInput,
-            coordinates: [lng, lat],
-          }),
-        )
+
+        const newFilters = {
+          ...filters,
+          location: searchInput,
+          coordinates: [lng, lat] as [number, number],
+        }
+        dispatch(setFilters(newFilters))
+        updateURL(newFilters)
       } else {
         console.warn("No location found at: ", searchInput)
       }
@@ -107,6 +109,10 @@ const FiltersBar = () => {
       console.error("Error search loaction: ", error)
     }
   }
+
+  useEffect(() => {
+    setSearchInput(filters.location)
+  }, [filters.location])
 
   return (
     <div className="flex justify-between items-center py-5">

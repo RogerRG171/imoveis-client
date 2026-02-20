@@ -3,7 +3,7 @@
 import { debounce } from "lodash"
 import { Search } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,29 +25,27 @@ const FiltersFull = () => {
   const dispatch = useDispatch()
   const pathname = usePathname()
   const router = useRouter()
-  const { isFiltersFullOpen } = useAppSelector((state) => state.global)
+  const { isFiltersFullOpen, filters } = useAppSelector((state) => state.global)
   const [localFilters, setLocalFilters] = useState(initialState.filters)
 
   //functions
 
-  const updateURL = debounce((newFilters: FiltersState) => {
-    const cleanFilters = cleanParams(newFilters)
-    const updateSearchParams = new URLSearchParams()
-
-    Object.entries(cleanFilters).forEach(([key, value]) => {
-      updateSearchParams.set(
-        key,
-        Array.isArray(value) ? value.join(",") : value.toString(),
-      )
-    })
-
-    router.push(`${pathname}?${updateSearchParams.toString()}`)
-  })
-
-  const handleSubmit = () => {
-    dispatch(setFilters(localFilters))
-    updateURL(localFilters)
-  }
+  const updateURL = useMemo(
+    () =>
+      debounce((newFilters: FiltersState) => {
+        const cleanFilters = cleanParams(newFilters)
+        const updateSearchParams = new URLSearchParams()
+        Object.entries(cleanFilters).forEach(([key, value]) => {
+          if (key === "lat" || key === "lng") return // Never output lat/lng
+          updateSearchParams.set(
+            key,
+            Array.isArray(value) ? value.join(",") : value.toString(),
+          )
+        })
+        router.push(`${pathname}?${updateSearchParams.toString()}`)
+      }, 300),
+    [pathname, router],
+  )
 
   const handleReset = () => {
     setLocalFilters(initialState.filters)
@@ -87,11 +85,13 @@ const FiltersFull = () => {
         const lat = parseFloat(result.lat)
         const lng = parseFloat(result.lon)
 
-        setLocalFilters((prev) => ({
-          ...prev,
-          coordinates: [lng, lat],
-        }))
-        handleSubmit()
+        const newFilters = {
+          ...localFilters,
+          coordinates: [lng, lat] as [number, number],
+        }
+        dispatch(setFilters(newFilters))
+        updateURL(newFilters)
+        setLocalFilters(newFilters)
       } else {
         console.warn("No location found at: ", localFilters.location)
       }
@@ -99,6 +99,10 @@ const FiltersFull = () => {
       console.error("Error search loaction: ", error)
     }
   }
+
+  useEffect(() => {
+    setLocalFilters(filters)
+  }, [filters])
 
   if (!isFiltersFullOpen) return null
 
@@ -294,7 +298,7 @@ const FiltersFull = () => {
         {/* Apply and reset buttons */}
         <div className="flex gap-4  mt-6">
           <Button
-            onClick={handleSubmit}
+            onClick={handleLocationSearch}
             className="flex-1 bg-primary-700 text-white rounded-xl hover:bg-primary-700/80 hover:underline"
           >
             Apply
