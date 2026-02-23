@@ -58,9 +58,9 @@ const Navbar = () => {
                   priority
                   style={{ height: "12px", width: "12px" }}
                 />
-                <span className="pl-2">RENTI</span>
+                <span className="pl-2">I</span>
                 <span className="text-secondary-500 font-light hover:!text-primary-300">
-                  FUL
+                  MOVEIS
                 </span>
               </div>
             </Link>
