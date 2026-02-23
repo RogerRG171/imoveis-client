@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   images: {
@@ -11,12 +11,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "*.amazonaws.com",
+        hostname: "*.aws.amazon.com",
         port: "",
         pathname: "/**",
       },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
